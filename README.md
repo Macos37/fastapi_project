@@ -14,6 +14,6 @@ Run
 docker run --name mytest -p 8000:8000 <image-name>
 ```
 
-and go to http://127.0.0.1/docs
+and go to http://127.0.0.1:8000/docs
 
 ![alt text](https://img-host.ru/bmgau.png)
