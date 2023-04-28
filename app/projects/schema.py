@@ -19,15 +19,15 @@ class ImageRead(BaseImage):
 class BaseProject(BaseModel):
     title: str
     description: str
-    
+  
     class Config:
         orm_mode = True
+
  
-       
 class ProjectsCreate(BaseProject):
     pass
- 
-      
+
+
 class ProjectsUpdate(BaseProject):
     pass
 

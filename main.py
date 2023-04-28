@@ -1,6 +1,7 @@
 from fastapi import Depends, FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.auth.oauth import auth_backend, fastapi_users
 from app.auth.schema import UserRead, UserCreate, UserUpdate
 from app.auth.models import User
@@ -16,7 +17,7 @@ app.include_router(
     fastapi_users.get_auth_router(auth_backend),
     prefix="/auth",
     tags=["Auth"],
-    
+
 )
 
 app.include_router(
@@ -46,6 +47,7 @@ origins = [
 
 app.mount("/static/", StaticFiles(directory="static"), name="static")
 
+
 @app.get("/authenticated-route")
 async def authenticated_route(user: User = Depends(current_user)):
     return {"message": f"Hello {user.email}!"}
@@ -55,6 +57,7 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
-    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
-                   "Authorization"],
+    allow_headers=["Content-Type", "Set-Cookie",
+                   "Access-Control-Allow-Headers",
+                   "Access-Control-Allow-Origin", "Authorization"],
 )

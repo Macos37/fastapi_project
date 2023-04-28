@@ -24,8 +24,8 @@ router = APIRouter(
 
 @router.post("/projects/", response_model=ProjectsCreate)
 async def create_project(
-    project: ProjectsCreate, 
-    db: Session = Depends(get_async_session), 
+    project: ProjectsCreate,
+    db: Session = Depends(get_async_session),
     current_user: User = Depends(current_user),
 ):
     new_project = Project(
@@ -54,8 +54,8 @@ async def get_all_project(
 
 @router.get("/projects/{project_id}", response_model=ProjectRead)
 async def get_project(
-    project_id: int, 
-    db: Session = Depends(get_async_session), 
+    project_id: int,
+    db: Session = Depends(get_async_session),
     current_user: User = Depends(current_user),
 ):
     query = selectinload(Project.image)
@@ -69,7 +69,7 @@ async def get_project(
 async def put_project(
     project_id: int,
     project_update: ProjectsUpdate,
-    db: Session = Depends(get_async_session), 
+    db: Session = Depends(get_async_session),
     current_user: User = Depends(current_user),
 ) -> Union[dict, ProjectsUpdate]:
     project = await db.execute(select(Project).where(
@@ -90,8 +90,8 @@ async def put_project(
 
 @router.delete("/projects/{project_id}")
 async def delete_project(
-    project_id: int, 
-    db: Session = Depends(get_async_session), 
+    project_id: int,
+    db: Session = Depends(get_async_session),
     current_user: User = Depends(current_user),
 ) -> dict:
     project = await db.execute(select(Project).where(
@@ -109,9 +109,9 @@ async def delete_project(
 
 @router.post("/projects/{project_id}/image", response_model=ImageCreate)
 async def add_image_for_project(
-    project_id: int, 
+    project_id: int,
     image: UploadFile = File(...),
-    db: Session = Depends(get_async_session), 
+    db: Session = Depends(get_async_session),
     current_user: User = Depends(current_user),
 ):
     project = await db.execute(select(Project).where(
@@ -140,13 +140,15 @@ add image {new_image.url} for project {project_id}")
     
     return new_image
 
+
 @router.get("/projects/{project_id}/static/media/", response_model=ImageRead)
 async def get_image_for_project(
-    project_id: int, 
+    project_id: int,
     db: Session = Depends(get_async_session),
     current_user: User = Depends(current_user),
 ):
-    project = await db.execute(select(Image).where(Image.project_id == project_id))
+    project = await db.execute(select(Image).where(
+        Image.project_id == project_id))
     logger.logger.info(
         f"User ID {current_user.id} GET image project ID {project_id}")
     if project is None:
@@ -157,11 +159,12 @@ async def get_image_for_project(
 
 @router.delete("/projects/{project_id}/static/media/", response_model=None)
 async def delete_image_for_project(
-    project_id: int, 
+    project_id: int,
     db: Session = Depends(get_async_session),
     current_user: User = Depends(current_user),
 ) -> dict:
-    project = await db.execute(select(Image).where(Image.project_id == project_id))
+    project = await db.execute(select(Image).where(
+        Image.project_id == project_id))
     project = project.scalars().first()
     if project is None:
         raise HTTPException(
